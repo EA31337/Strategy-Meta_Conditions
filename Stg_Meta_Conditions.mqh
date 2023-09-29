@@ -1,73 +1,89 @@
 /**
  * @file
- * Implements RSI meta strategy.
+ * Implements Conditions meta strategy.
  */
 
 // Prevents processing this includes file multiple times.
-#ifndef STG_META_RSI_MQH
-#define STG_META_RSI_MQH
+#ifndef STG_META_CONDITIONS_MQH
+#define STG_META_CONDITIONS_MQH
+
+// Trade conditions.
+enum ENUM_STG_CONDITIONS_CONDITION {
+  STG_CONDITIONS_COND_0_NONE = 0,                      // None
+  STG_CONDITIONS_COND_IS_PEAK = TRADE_COND_IS_PEAK,    // Market is at peak level
+  STG_CONDITIONS_COND_IS_PIVOT = TRADE_COND_IS_PIVOT,  // Market is in pivot levels
+  // STG_CONDITIONS_COND_ORDERS_PROFIT_GT_01PC = TRADE_COND_ORDERS_PROFIT_GT_01PC,  // Equity > 1%
+  // STG_CONDITIONS_COND_ORDERS_PROFIT_LT_01PC = TRADE_COND_ORDERS_PROFIT_LT_01PC,  // Equity < 1%
+  // STG_CONDITIONS_COND_ORDERS_PROFIT_GT_02PC = TRADE_COND_ORDERS_PROFIT_GT_02PC,  // Equity > 2%
+  // STG_CONDITIONS_COND_ORDERS_PROFIT_LT_02PC = TRADE_COND_ORDERS_PROFIT_LT_02PC,  // Equity < 2%
+  // STG_CONDITIONS_COND_ORDERS_PROFIT_GT_05PC = TRADE_COND_ORDERS_PROFIT_GT_05PC,  // Equity > 5%
+  // STG_CONDITIONS_COND_ORDERS_PROFIT_LT_05PC = TRADE_COND_ORDERS_PROFIT_LT_05PC,  // Equity < 5%
+  // STG_CONDITIONS_COND_ORDERS_PROFIT_GT_10PC = TRADE_COND_ORDERS_PROFIT_GT_10PC,  // Equity > 10%
+  // STG_CONDITIONS_COND_ORDERS_PROFIT_LT_10PC = TRADE_COND_ORDERS_PROFIT_LT_10PC,  // Equity < 10%
+};
 
 // User input params.
-INPUT2_GROUP("Meta RSI strategy: main params");
-INPUT2 ENUM_STRATEGY Meta_RSI_Strategy_RSI_Neutral = STRAT_BANDS;  // Strategy for RSI at neutral range (40-60)
-INPUT2 ENUM_STRATEGY Meta_RSI_Strategy_RSI_Peak = STRAT_FORCE;     // Strategy for RSI at peak range (0-20,80-100)
-INPUT2 ENUM_STRATEGY Meta_RSI_Strategy_RSI_Trend = STRAT_AC;       // Strategy for RSI at trend range (20-40,60-80)
-INPUT2_GROUP("Meta RSI strategy: common params");
-INPUT2 float Meta_RSI_LotSize = 0;                // Lot size
-INPUT2 int Meta_RSI_SignalOpenMethod = 0;         // Signal open method
-INPUT2 float Meta_RSI_SignalOpenLevel = 0;        // Signal open level
-INPUT2 int Meta_RSI_SignalOpenFilterMethod = 32;  // Signal open filter method
-INPUT2 int Meta_RSI_SignalOpenFilterTime = 3;     // Signal open filter time (0-31)
-INPUT2 int Meta_RSI_SignalOpenBoostMethod = 0;    // Signal open boost method
-INPUT2 int Meta_RSI_SignalCloseMethod = 0;        // Signal close method
-INPUT2 int Meta_RSI_SignalCloseFilter = 32;       // Signal close filter (-127-127)
-INPUT2 float Meta_RSI_SignalCloseLevel = 0;       // Signal close level
-INPUT2 int Meta_RSI_PriceStopMethod = 0;          // Price limit method
-INPUT2 float Meta_RSI_PriceStopLevel = 2;         // Price limit level
-INPUT2 int Meta_RSI_TickFilterMethod = 32;        // Tick filter method (0-255)
-INPUT2 float Meta_RSI_MaxSpread = 4.0;            // Max spread to trade (in pips)
-INPUT2 short Meta_RSI_Shift = 0;                  // Shift
-INPUT2 float Meta_RSI_OrderCloseLoss = 200;       // Order close loss
-INPUT2 float Meta_RSI_OrderCloseProfit = 200;     // Order close profit
-INPUT2 int Meta_RSI_OrderCloseTime = 2880;        // Order close time in mins (>0) or bars (<0)
-INPUT_GROUP("Meta RSI strategy: RSI oscillator params");
-INPUT int Meta_RSI_RSI_Period = 14;                                    // Period
-INPUT ENUM_APPLIED_PRICE Meta_RSI_RSI_Applied_Price = PRICE_TYPICAL;   // Applied Price
-INPUT int Meta_RSI_RSI_Shift = 0;                                      // Shift
-INPUT ENUM_IDATA_SOURCE_TYPE Meta_RSI_RSI_SourceType = IDATA_BUILTIN;  // Source type
+INPUT2_GROUP("Meta Conditions strategy: main params");
+INPUT2 ENUM_STG_CONDITIONS_CONDITION Meta_Conditions_Condition1 = STG_CONDITIONS_COND_IS_PEAK;  // Trade condition 1
+INPUT2 ENUM_STRATEGY Meta_Conditions_Strategy1 = STRAT_AMA;  // Strategy 1 on condition 1
+INPUT2 ENUM_STG_CONDITIONS_CONDITION Meta_Conditions_Condition2 = STG_CONDITIONS_COND_IS_PIVOT;  // Trade condition 2
+INPUT2 ENUM_STRATEGY Meta_Conditions_Strategy2 = STRAT_MA_TREND;  // Strategy 2 on condition 2
+INPUT2 ENUM_STG_CONDITIONS_CONDITION Meta_Conditions_Condition3 = STG_CONDITIONS_COND_0_NONE;  // Trade condition 3
+INPUT2 ENUM_STRATEGY Meta_Conditions_Strategy3 = STRAT_NONE;  // Strategy 3 on condition 3
+INPUT2_GROUP("Meta Conditions strategy: common params");
+INPUT2 float Meta_Conditions_LotSize = 0;                // Lot size
+INPUT2 int Meta_Conditions_SignalOpenMethod = 0;         // Signal open method
+INPUT2 float Meta_Conditions_SignalOpenLevel = 0;        // Signal open level
+INPUT2 int Meta_Conditions_SignalOpenFilterMethod = 32;  // Signal open filter method
+INPUT2 int Meta_Conditions_SignalOpenFilterTime = 3;     // Signal open filter time (0-31)
+INPUT2 int Meta_Conditions_SignalOpenBoostMethod = 0;    // Signal open boost method
+INPUT2 int Meta_Conditions_SignalCloseMethod = 0;        // Signal close method
+INPUT2 int Meta_Conditions_SignalCloseFilter = 32;       // Signal close filter (-127-127)
+INPUT2 float Meta_Conditions_SignalCloseLevel = 0;       // Signal close level
+INPUT2 int Meta_Conditions_PriceStopMethod = 0;          // Price limit method
+INPUT2 float Meta_Conditions_PriceStopLevel = 2;         // Price limit level
+INPUT2 int Meta_Conditions_TickFilterMethod = 32;        // Tick filter method (0-255)
+INPUT2 float Meta_Conditions_MaxSpread = 4.0;            // Max spread to trade (in pips)
+INPUT2 short Meta_Conditions_Shift = 0;                  // Shift
+INPUT2 float Meta_Conditions_OrderCloseLoss = 200;       // Order close loss
+INPUT2 float Meta_Conditions_OrderCloseProfit = 200;     // Order close profit
+INPUT2 int Meta_Conditions_OrderCloseTime = 2880;        // Order close time in mins (>0) or bars (<0)
 
 // Structs.
 // Defines struct with default user strategy values.
-struct Stg_Meta_RSI_Params_Defaults : StgParams {
-  Stg_Meta_RSI_Params_Defaults()
-      : StgParams(::Meta_RSI_SignalOpenMethod, ::Meta_RSI_SignalOpenFilterMethod, ::Meta_RSI_SignalOpenLevel,
-                  ::Meta_RSI_SignalOpenBoostMethod, ::Meta_RSI_SignalCloseMethod, ::Meta_RSI_SignalCloseFilter,
-                  ::Meta_RSI_SignalCloseLevel, ::Meta_RSI_PriceStopMethod, ::Meta_RSI_PriceStopLevel,
-                  ::Meta_RSI_TickFilterMethod, ::Meta_RSI_MaxSpread, ::Meta_RSI_Shift) {
-    Set(STRAT_PARAM_LS, ::Meta_RSI_LotSize);
-    Set(STRAT_PARAM_OCL, ::Meta_RSI_OrderCloseLoss);
-    Set(STRAT_PARAM_OCP, ::Meta_RSI_OrderCloseProfit);
-    Set(STRAT_PARAM_OCT, ::Meta_RSI_OrderCloseTime);
-    Set(STRAT_PARAM_SOFT, ::Meta_RSI_SignalOpenFilterTime);
+struct Stg_Meta_Conditions_Params_Defaults : StgParams {
+  Stg_Meta_Conditions_Params_Defaults()
+      : StgParams(::Meta_Conditions_SignalOpenMethod, ::Meta_Conditions_SignalOpenFilterMethod,
+                  ::Meta_Conditions_SignalOpenLevel, ::Meta_Conditions_SignalOpenBoostMethod,
+                  ::Meta_Conditions_SignalCloseMethod, ::Meta_Conditions_SignalCloseFilter,
+                  ::Meta_Conditions_SignalCloseLevel, ::Meta_Conditions_PriceStopMethod,
+                  ::Meta_Conditions_PriceStopLevel, ::Meta_Conditions_TickFilterMethod, ::Meta_Conditions_MaxSpread,
+                  ::Meta_Conditions_Shift) {
+    Set(STRAT_PARAM_LS, ::Meta_Conditions_LotSize);
+    Set(STRAT_PARAM_OCL, ::Meta_Conditions_OrderCloseLoss);
+    Set(STRAT_PARAM_OCP, ::Meta_Conditions_OrderCloseProfit);
+    Set(STRAT_PARAM_OCT, ::Meta_Conditions_OrderCloseTime);
+    Set(STRAT_PARAM_SOFT, ::Meta_Conditions_SignalOpenFilterTime);
   }
 };
 
-class Stg_Meta_RSI : public Strategy {
+class Stg_Meta_Conditions : public Strategy {
  protected:
   DictStruct<long, Ref<Strategy>> strats;
+  Trade strade;  // Trade instance.
 
  public:
-  Stg_Meta_RSI(StgParams &_sparams, TradeParams &_tparams, ChartParams &_cparams, string _name = "")
-      : Strategy(_sparams, _tparams, _cparams, _name) {}
+  Stg_Meta_Conditions(StgParams &_sparams, TradeParams &_tparams, ChartParams &_cparams, string _name = "")
+      : Strategy(_sparams, _tparams, _cparams, _name), strade(_tparams, _cparams) {}
 
-  static Stg_Meta_RSI *Init(ENUM_TIMEFRAMES _tf = NULL, EA *_ea = NULL) {
+  static Stg_Meta_Conditions *Init(ENUM_TIMEFRAMES _tf = NULL, EA *_ea = NULL) {
     // Initialize strategy initial values.
-    Stg_Meta_RSI_Params_Defaults stg_rsi_defaults;
-    StgParams _stg_params(stg_rsi_defaults);
+    Stg_Meta_Conditions_Params_Defaults stg_conditions_defaults;
+    StgParams _stg_params(stg_conditions_defaults);
     // Initialize Strategy instance.
     ChartParams _cparams(_tf, _Symbol);
     TradeParams _tparams;
-    Strategy *_strat = new Stg_Meta_RSI(_stg_params, _tparams, _cparams, "(Meta) RSI");
+    Strategy *_strat = new Stg_Meta_Conditions(_stg_params, _tparams, _cparams, "(Meta) Conditions");
     return _strat;
   }
 
@@ -75,16 +91,9 @@ class Stg_Meta_RSI : public Strategy {
    * Event on strategy's init.
    */
   void OnInit() {
-    StrategyAdd(Meta_RSI_Strategy_RSI_Neutral, 0);
-    StrategyAdd(Meta_RSI_Strategy_RSI_Peak, 1);
-    StrategyAdd(Meta_RSI_Strategy_RSI_Trend, 2);
-    // Initialize indicators.
-    {
-      IndiRSIParams _indi_params(::Meta_RSI_RSI_Period, ::Meta_RSI_RSI_Applied_Price, ::Meta_RSI_RSI_Shift);
-      _indi_params.SetDataSourceType(::Meta_RSI_RSI_SourceType);
-      _indi_params.SetTf(PERIOD_D1);
-      SetIndicator(new Indi_RSI(_indi_params));
-    }
+    StrategyAdd(Meta_Conditions_Strategy1, 1);
+    StrategyAdd(Meta_Conditions_Strategy2, 2);
+    StrategyAdd(Meta_Conditions_Strategy3, 3);
   }
 
   /**
@@ -295,29 +304,44 @@ class Stg_Meta_RSI : public Strategy {
    * Check strategy's opening signal.
    */
   bool SignalOpen(ENUM_ORDER_TYPE _cmd, int _method, float _level = 0.0f, int _shift = 0) {
-    bool _result = true;
+    bool _result = false;
     // uint _ishift = _indi.GetShift();
     uint _ishift = _shift;
-    IndicatorBase *_indi = GetIndicator();
     Ref<Strategy> _strat_ref;
-    if (_indi[_ishift][0] <= 20 || _indi[_ishift][0] >= 80) {
-      // RSI value is at peak range (0-20 or 80-100).
+    if (!_result && Meta_Conditions_Condition1 != STG_CONDITIONS_COND_0_NONE &&
+        strade.CheckCondition((ENUM_TRADE_CONDITION)Meta_Conditions_Condition1)) {
       _strat_ref = strats.GetByKey(1);
-    } else if (_indi[_ishift][0] < 40 || _indi[_ishift][0] > 60) {
-      // RSI value is at trend range (20-40 or 60-80).
+      if (_strat_ref.IsSet()) {
+        _level = _level == 0.0f ? _strat_ref.Ptr().Get<float>(STRAT_PARAM_SOL) : _level;
+        _method = _method == 0 ? _strat_ref.Ptr().Get<int>(STRAT_PARAM_SOM) : _method;
+        _shift = _shift == 0 ? _strat_ref.Ptr().Get<int>(STRAT_PARAM_SHIFT) : _shift;
+        _result |= _strat_ref.Ptr().SignalOpen(_cmd, _method, _level, _shift);
+      }
+    }
+    if (!_result && Meta_Conditions_Condition2 != STG_CONDITIONS_COND_0_NONE &&
+        strade.CheckCondition((ENUM_TRADE_CONDITION)Meta_Conditions_Condition2)) {
       _strat_ref = strats.GetByKey(2);
-    } else if (_indi[_ishift][0] > 40 && _indi[_ishift][0] < 60) {
-      // RSI value is at neutral range (40-60).
-      _strat_ref = strats.GetByKey(0);
+      if (_strat_ref.IsSet()) {
+        _level = _level == 0.0f ? _strat_ref.Ptr().Get<float>(STRAT_PARAM_SOL) : _level;
+        _method = _method == 0 ? _strat_ref.Ptr().Get<int>(STRAT_PARAM_SOM) : _method;
+        _shift = _shift == 0 ? _strat_ref.Ptr().Get<int>(STRAT_PARAM_SHIFT) : _shift;
+        _result |= _strat_ref.Ptr().SignalOpen(_cmd, _method, _level, _shift);
+      }
+    }
+    if (!_result && Meta_Conditions_Condition3 != STG_CONDITIONS_COND_0_NONE &&
+        strade.CheckCondition((ENUM_TRADE_CONDITION)Meta_Conditions_Condition3)) {
+      _strat_ref = strats.GetByKey(3);
+      if (_strat_ref.IsSet()) {
+        _level = _level == 0.0f ? _strat_ref.Ptr().Get<float>(STRAT_PARAM_SOL) : _level;
+        _method = _method == 0 ? _strat_ref.Ptr().Get<int>(STRAT_PARAM_SOM) : _method;
+        _shift = _shift == 0 ? _strat_ref.Ptr().Get<int>(STRAT_PARAM_SHIFT) : _shift;
+        _result |= _strat_ref.Ptr().SignalOpen(_cmd, _method, _level, _shift);
+      }
     }
     if (!_strat_ref.IsSet()) {
       // Returns false when strategy is not set.
       return false;
     }
-    _level = _level == 0.0f ? _strat_ref.Ptr().Get<float>(STRAT_PARAM_SOL) : _level;
-    _method = _method == 0 ? _strat_ref.Ptr().Get<int>(STRAT_PARAM_SOM) : _method;
-    _shift = _shift == 0 ? _strat_ref.Ptr().Get<int>(STRAT_PARAM_SHIFT) : _shift;
-    _result &= _strat_ref.Ptr().SignalOpen(_cmd, _method, _level, _shift);
     return _result;
   }
 
@@ -331,4 +355,4 @@ class Stg_Meta_RSI : public Strategy {
   }
 };
 
-#endif  // STG_META_RSI_MQH
+#endif  // STG_META_CONDITIONS_MQH
