@@ -9,9 +9,9 @@
 
 // Trade conditions.
 enum ENUM_STG_CONDITIONS_CONDITION {
-  STG_CONDITIONS_COND_0_NONE = 0,                                                // None
-  STG_CONDITIONS_COND_IS_PEAK = TRADE_COND_IS_PEAK,                              // Market is at peak level
-  STG_CONDITIONS_COND_IS_PIVOT = TRADE_COND_IS_PIVOT,                            // Market is in pivot levels
+  STG_CONDITIONS_COND_0_NONE = 0,                      // None
+  STG_CONDITIONS_COND_IS_PEAK = TRADE_COND_IS_PEAK,    // Market is at peak level
+  STG_CONDITIONS_COND_IS_PIVOT = TRADE_COND_IS_PIVOT,  // Market is in pivot levels
   // STG_CONDITIONS_COND_ORDERS_PROFIT_GT_01PC = TRADE_COND_ORDERS_PROFIT_GT_01PC,  // Equity > 1%
   // STG_CONDITIONS_COND_ORDERS_PROFIT_LT_01PC = TRADE_COND_ORDERS_PROFIT_LT_01PC,  // Equity < 1%
   // STG_CONDITIONS_COND_ORDERS_PROFIT_GT_02PC = TRADE_COND_ORDERS_PROFIT_GT_02PC,  // Equity > 2%
@@ -308,7 +308,8 @@ class Stg_Meta_Conditions : public Strategy {
     // uint _ishift = _indi.GetShift();
     uint _ishift = _shift;
     Ref<Strategy> _strat_ref;
-    if (!_result && strade.CheckCondition((ENUM_TRADE_CONDITION)Meta_Conditions_Condition1)) {
+    if (!_result && Meta_Conditions_Condition1 != STG_CONDITIONS_COND_0_NONE &&
+        strade.CheckCondition((ENUM_TRADE_CONDITION)Meta_Conditions_Condition1)) {
       _strat_ref = strats.GetByKey(1);
       if (_strat_ref.IsSet()) {
         _level = _level == 0.0f ? _strat_ref.Ptr().Get<float>(STRAT_PARAM_SOL) : _level;
@@ -317,7 +318,8 @@ class Stg_Meta_Conditions : public Strategy {
         _result |= _strat_ref.Ptr().SignalOpen(_cmd, _method, _level, _shift);
       }
     }
-    if (!_result && strade.CheckCondition((ENUM_TRADE_CONDITION)Meta_Conditions_Condition2)) {
+    if (!_result && Meta_Conditions_Condition2 != STG_CONDITIONS_COND_0_NONE &&
+        strade.CheckCondition((ENUM_TRADE_CONDITION)Meta_Conditions_Condition2)) {
       _strat_ref = strats.GetByKey(2);
       if (_strat_ref.IsSet()) {
         _level = _level == 0.0f ? _strat_ref.Ptr().Get<float>(STRAT_PARAM_SOL) : _level;
@@ -326,7 +328,8 @@ class Stg_Meta_Conditions : public Strategy {
         _result |= _strat_ref.Ptr().SignalOpen(_cmd, _method, _level, _shift);
       }
     }
-    if (!_result && strade.CheckCondition((ENUM_TRADE_CONDITION)Meta_Conditions_Condition3)) {
+    if (!_result && Meta_Conditions_Condition3 != STG_CONDITIONS_COND_0_NONE &&
+        strade.CheckCondition((ENUM_TRADE_CONDITION)Meta_Conditions_Condition3)) {
       _strat_ref = strats.GetByKey(3);
       if (_strat_ref.IsSet()) {
         _level = _level == 0.0f ? _strat_ref.Ptr().Get<float>(STRAT_PARAM_SOL) : _level;
