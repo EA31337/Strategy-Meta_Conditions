@@ -27,7 +27,7 @@ INPUT2_GROUP("Meta Conditions strategy: main params");
 INPUT2 ENUM_STG_CONDITIONS_CONDITION Meta_Conditions_Condition1 = STG_CONDITIONS_COND_IS_PEAK;  // Trade condition 1
 INPUT2 ENUM_STRATEGY Meta_Conditions_Strategy1 = STRAT_AMA;  // Strategy 1 on condition 1
 INPUT2 ENUM_STG_CONDITIONS_CONDITION Meta_Conditions_Condition2 = STG_CONDITIONS_COND_IS_PIVOT;  // Trade condition 2
-INPUT2 ENUM_STRATEGY Meta_Conditions_Strategy2 = STRAT_MA_TREND;  // Strategy 2 on condition 2
+INPUT2 ENUM_STRATEGY Meta_Conditions_Strategy2 = STRAT_AWESOME;  // Strategy 2 on condition 2
 INPUT2 ENUM_STG_CONDITIONS_CONDITION Meta_Conditions_Condition3 = STG_CONDITIONS_COND_0_NONE;  // Trade condition 3
 INPUT2 ENUM_STRATEGY Meta_Conditions_Strategy3 = STRAT_NONE;  // Strategy 3 on condition 3
 INPUT3_GROUP("Meta Conditions strategy: common params");
